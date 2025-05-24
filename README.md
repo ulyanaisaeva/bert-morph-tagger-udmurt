@@ -1,57 +1,29 @@
-# Udmurt-transformer-parser
+# bert-morph-tagger-udmurt
 
-Transformer-based POS-tagging model for Udmurt. Based on the `bert-base-multilingual-uncased` pretrained on Udmurt texts. The pretrained BERT is published on the [HuggingFace Hub](https://huggingface.co/ulyanaisaeva/udmurt-bert-base-uncased).
+This repository contains the training code for an encoder-based (BERT-like) model for morphological tagging. The trained model performs fine-grained token-level morphological parsing.
 
+🤗 [Morphological parser for Udmurt on HuggingFace Hub](https://huggingface.co/ulyanaisaeva/bert-morph-tagger-udmurt) 🤗
 
-**NB: the [training data](http://udmurt.web-corpora.net/) used in this project is not a public dataset but is available for researchers by request to the owner. The following code is organized based on an assumption that the raw files are in the `data_raw` folder and after preprocessing the are in the `data` folder.**
-
-The model is temporarily stored on Google Drive. You may download it [here](https://drive.google.com/file/d/10zolxyFu52JI78kyVVRY0ub7SJ4BXZtf/view) or via command line (requires `gdown`):
-
-```bash
-gdown -O "models/udm_morph_tagger.model" "10zolxyFu52JI78kyVVRY0ub7SJ4BXZtf" 
-```
-
-- BERT pretraining: [Extending_BERT.ipynb](https://github.com/ulyanaisaeva/udmurt-transformer-parser/blob/main/Extending_BERT.ipynb)
-- POS-tagger training: [Train_POStagger.ipynb](https://github.com/ulyanaisaeva/udmurt-transformer-parser/blob/main/Train_POStagger.ipynb)
+The training code was used to train a morhological tagging model for the Udmurt language, which is morphologically rich and relatively low-resource. The model is based on [`cis-lmu/glot500-base`](https://huggingface.co/cis-lmu/glot500-base) multilingual encoder-only model fine-tuned for morphological analysis. The model weights are available on the Hugging Face Hub.
 
 
-<details><summary>Repo structure</summary>
-<p>
+## Features
 
-```
-.
-├── data        <-- files in .txt and .conllu
-│   ├── conllu
-│   │   └── example.conllu
-│   └── txt
-│       └── example.txt
-├── data_raw    <-- original files
-├── model_utils     <-- tagger class and data utils
-│   ├── modify_model.py
-│   ├── transformer_tagger.py
-│   └── ud_dataset_utils.py
-├── models                  <-- trained models are saved here
-├── tokenizer               <-- trained tokenizers are saved here
-│   └── match_vocabs.py
-├── Extending_Bert.ipynb    <-- notebook to pretrain BERT on `data`
-├── Train_POStagger.ipynb   <-- notebook to train a POS-tagger
-```
+- Supports both standart cross-entropy training and soft training for morhological ambiguity
+- Training implemented using the `transformers` library for seamless compatibility with Hugging Face ecosystem
+- Easily adaptable to other languages
 
-</p>
-</details>
+**NB: the [training data](http://udmurt.web-corpora.net/) used in this project is not a public dataset but is available for researchers by request to the owner.**
 
 
-### Usage (requires GPU)
+## Citation
 
-```python
-import pickle
-from model_utils.transformer_tagger import *
+If you use this repository or the model in your research, please cite the related publication:
 
-with open("models/udm_morph_tagger.model", "rb") as model_file:
-    model = pickle.load(model_file)
+> [Citation coming soon, paper under anonymous review]
 
-test_data_file = "data/conllu/example.conllu"
-test_dataset = UDDataset(read_infile(test_data_file), tokenizer=tokenizer)
 
-model.predict(test_dataset)
-```
+---
+
+Feel free to open issues or contribute improvements via pull requests.  
+For questions or support, please contact ulyana.isaeva20@gmail.com.
